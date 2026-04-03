@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Wizard | JS Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-indigo-100 p-8 text-center">
+        <div class="mb-6">
+            <span class="text-4xl">🔮</span>
+            <h1 class="text-3xl font-extrabold text-indigo-700 mt-2">Number Wizard</h1>
+            <p class="text-slate-500 text-sm">Guess the secret number between 1 and 100</p>
+        </div>
+
+        <div class="space-y-4">
+            <input type="number" id="guessInput" 
+                class="w-full text-center text-2xl font-bold p-4 rounded-xl border-2 border-indigo-100 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 outline-none transition-all"
+                placeholder="??">
+            
+            <button id="guessBtn" 
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95">
+                Submit Guess
+            </button>
+        </div>
+
+        <div class="mt-8 min-h-[80px]">
+            <p id="feedback" class="text-xl font-bold text-slate-700"></p>
+            <p id="stats" class="text-slate-400 text-sm mt-2 hidden">
+                Attempts: <span id="attemptCount" class="font-mono text-indigo-600">0</span>
+            </p>
+        </div>
+
+        <button id="resetBtn" 
+            class="mt-6 text-indigo-400 hover:text-indigo-600 text-sm font-medium transition-colors hidden">
+            🔄 Start New Game
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
