@@ -1,0 +1,353 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 1rem 0 0; }
+.tab { padding: 7px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 13px; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all 0.15s; }
+.tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+.panel { display: none; }
+.panel.active { display: block; }
+.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.demo-area { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; margin-bottom: 1rem; }
+.concept-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.badge-blue { background: #E6F1FB; color: #0C447C; }
+.badge-teal { background: #E1F5EE; color: #085041; }
+.badge-amber { background: #FAEEDA; color: #633806; }
+.badge-purple { background: #EEEDFE; color: #3C3489; }
+.concept-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+code { font-family: var(--font-mono); font-size: 12px; background: var(--color-background-secondary); padding: 1px 5px; border-radius: 4px; color: var(--color-text-primary); }
+pre { font-family: var(--font-mono); font-size: 12px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px; overflow-x: auto; line-height: 1.7; color: var(--color-text-primary); margin-bottom: 8px; }
+.hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 6px; }
+h3 { font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 8px; }
+.msg { font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: var(--border-radius-md); margin-top: 8px; }
+.msg-success { background: #EAF3DE; color: #3B6D11; }
+.msg-error { background: #FCEBEB; color: #A32D2D; }
+.msg-info { background: #E6F1FB; color: #185FA5; }
+.field-error { font-size: 12px; color: #A32D2D; margin-top: 3px; }
+label { font-size: 13px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; }
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('guess')">1. Number Guessing</button>
+  <button class="tab" onclick="showTab('convert')">2. Unit Converter</button>
+  <button class="tab" onclick="showTab('clock')">3. Clock + Greeting</button>
+  <button class="tab" onclick="showTab('form')">4. Form Validator</button>
+</div>
+
+<!-- TAB 1: NUMBER GUESSING -->
+<div id="tab-guess" class="panel active">
+  <div class="card">
+    <div class="section-label">Concepts used</div>
+    <div class="concept-row"><span class="badge badge-blue">Math.random()</span><span class="concept-text">Generates a random decimal 0–1. Multiply × 100 and use Math.floor() to get 1–100</span></div>
+    <div class="concept-row"><span class="badge badge-teal">if / else if</span><span class="concept-text">Compare guess to secret number — less than, greater than, or equal</span></div>
+    <div class="concept-row"><span class="badge badge-amber">DOM input</span><span class="concept-text">Read user's typed value with <code>input.value</code>, convert to number with <code>Number()</code></span></div>
+  </div>
+
+  <div class="card">
+    <h3>How to build it — step by step</h3>
+    <p><strong style="font-weight:500">Step 1:</strong> Generate a secret number when the page loads</p>
+    <pre>let secret = Math.floor(Math.random() * 100) + 1;
+let tries = 0;</pre>
+    <p><strong style="font-weight:500">Step 2:</strong> When Guess is clicked, read the input and compare</p>
+    <pre>function checkGuess() {
+  let guess = Number(document.getElementById("guessInput").value);
+  tries++;
+  if (guess < secret) {
+    showMessage("Too Low!");
+  } else if (guess > secret) {
+    showMessage("Too High!");
+  } else {
+    showMessage("Correct! Took " + tries + " tries.");
+  }
+}</pre>
+    <p><strong style="font-weight:500">Step 3:</strong> Reset resets the secret number and clears tries</p>
+    <pre>function resetGame() {
+  secret = Math.floor(Math.random() * 100) + 1;
+  tries = 0;
+  document.getElementById("guessInput").value = "";
+  document.getElementById("msg").textContent = "";
+}</pre>
+  </div>
+
+  <div class="card">
+    <h3>Live demo</h3>
+    <div class="demo-area">
+      <label>Your guess (1–100)</label>
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
+        <input type="number" id="g-input" min="1" max="100" placeholder="e.g. 50" style="width:120px;">
+        <button onclick="doGuess()">Guess</button>
+        <button onclick="resetGuess()">Reset</button>
+      </div>
+      <div id="g-msg"></div>
+      <div id="g-tries" class="hint"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: UNIT CONVERTER -->
+<div id="tab-convert" class="panel">
+  <div class="card">
+    <div class="section-label">Concepts used</div>
+    <div class="concept-row"><span class="badge badge-blue">Conversion math</span><span class="concept-text">Convert everything to meters first, then multiply to any other unit</span></div>
+    <div class="concept-row"><span class="badge badge-teal">oninput event</span><span class="concept-text">Fires every time the user types — no button needed. Also use onchange for the dropdown</span></div>
+    <div class="concept-row"><span class="badge badge-amber">isNaN()</span><span class="concept-text">Detects if the typed value is not a number — used for validation</span></div>
+  </div>
+
+  <div class="card">
+    <h3>How to build it — step by step</h3>
+    <p><strong style="font-weight:500">Step 1:</strong> Define multipliers to convert any unit → meters</p>
+    <pre>const toMeters = { km: 1000, m: 1, cm: 0.01, mm: 0.001 };</pre>
+    <p><strong style="font-weight:500">Step 2:</strong> On any input/change, convert and display</p>
+    <pre>function convert() {
+  let val = parseFloat(document.getElementById("val").value);
+  let unit = document.getElementById("unit").value;
+  if (isNaN(val)) { showError("Enter a valid number"); return; }
+
+  let inMeters = val * toMeters[unit];
+  document.getElementById("km").textContent = (inMeters / 1000) + " km";
+  document.getElementById("m").textContent  = inMeters + " m";
+  document.getElementById("cm").textContent = (inMeters * 100) + " cm";
+  document.getElementById("mm").textContent = (inMeters * 1000) + " mm";
+}</pre>
+    <p><strong style="font-weight:500">Step 3:</strong> Hook both elements to the same function</p>
+    <pre>&lt;input oninput="convert()" id="val"&gt;
+&lt;select onchange="convert()" id="unit"&gt;...&lt;/select&gt;</pre>
+  </div>
+
+  <div class="card">
+    <h3>Live demo</h3>
+    <div class="demo-area">
+      <div style="display:flex; gap:8px; margin-bottom:12px; align-items:center;">
+        <input type="number" id="c-val" placeholder="Enter value" oninput="doConvert()" style="width:140px;">
+        <select id="c-unit" onchange="doConvert()">
+          <option value="km">km</option>
+          <option value="m">m</option>
+          <option value="cm">cm</option>
+          <option value="mm">mm</option>
+        </select>
+      </div>
+      <div id="c-err" class="msg msg-error" style="display:none;"></div>
+      <div id="c-results" style="display:none;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;">
+            <div class="section-label">km</div><div id="r-km" style="font-size:15px;font-weight:500;"></div>
+          </div>
+          <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;">
+            <div class="section-label">m</div><div id="r-m" style="font-size:15px;font-weight:500;"></div>
+          </div>
+          <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;">
+            <div class="section-label">cm</div><div id="r-cm" style="font-size:15px;font-weight:500;"></div>
+          </div>
+          <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;">
+            <div class="section-label">mm</div><div id="r-mm" style="font-size:15px;font-weight:500;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: CLOCK -->
+<div id="tab-clock" class="panel">
+  <div class="card">
+    <div class="section-label">Concepts used</div>
+    <div class="concept-row"><span class="badge badge-blue">new Date()</span><span class="concept-text">Gets current time. Use .getHours(), .getMinutes(), .getSeconds()</span></div>
+    <div class="concept-row"><span class="badge badge-teal">setInterval()</span><span class="concept-text">Runs a function every N milliseconds — use 1000 (1 second) for the clock</span></div>
+    <div class="concept-row"><span class="badge badge-amber">padStart()</span><span class="concept-text">Formats numbers like "9" → "09": <code>"9".padStart(2, "0")</code></span></div>
+  </div>
+
+  <div class="card">
+    <h3>How to build it — step by step</h3>
+    <p><strong style="font-weight:500">Step 1:</strong> Write a function to update the clock display</p>
+    <pre>function updateClock() {
+  let now = new Date();
+  let h = now.getHours();
+  let m = String(now.getMinutes()).padStart(2, "0");
+  let s = String(now.getSeconds()).padStart(2, "0");
+  let hh = String(h).padStart(2, "0");
+
+  document.getElementById("clock").textContent = hh + ":" + m + ":" + s;
+  document.getElementById("greeting").textContent = getGreeting(h);
+}</pre>
+    <p><strong style="font-weight:500">Step 2:</strong> Decide greeting based on hour</p>
+    <pre>function getGreeting(h) {
+  if (h >= 5 && h < 12)  return "Good Morning";
+  if (h >= 12 && h < 18) return "Good Afternoon";
+  if (h >= 18 && h < 22) return "Good Evening";
+  return "Good Night";
+}</pre>
+    <p><strong style="font-weight:500">Step 3:</strong> Start the clock (runs every 1 second)</p>
+    <pre>updateClock();
+setInterval(updateClock, 1000);</pre>
+  </div>
+
+  <div class="card">
+    <h3>Live demo</h3>
+    <div class="demo-area" style="text-align:center; padding: 1.5rem;">
+      <div id="live-clock" style="font-size:36px; font-weight:500; font-family:var(--font-mono); letter-spacing:2px;"></div>
+      <div id="live-greeting" style="font-size:16px; color:var(--color-text-secondary); margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: FORM VALIDATOR -->
+<div id="tab-form" class="panel">
+  <div class="card">
+    <div class="section-label">Concepts used</div>
+    <div class="concept-row"><span class="badge badge-blue">.trim().length</span><span class="concept-text">Removes whitespace then checks character count for name validation</span></div>
+    <div class="concept-row"><span class="badge badge-teal">.includes("@")</span><span class="concept-text">Simple email check — does the string contain an @ symbol?</span></div>
+    <div class="concept-row"><span class="badge badge-amber">.checked</span><span class="concept-text">For checkboxes — returns true/false whether it's ticked</span></div>
+    <div class="concept-row"><span class="badge badge-purple">Flag pattern</span><span class="concept-text">Use a <code>let valid = true</code> flag — set to false for each error, submit only if still true</span></div>
+  </div>
+
+  <div class="card">
+    <h3>How to build it — step by step</h3>
+    <p><strong style="font-weight:500">The key pattern — flag + per-field errors</strong></p>
+    <pre>function validateForm() {
+  let valid = true;
+
+  let name = document.getElementById("name").value.trim();
+  if (name.length < 3) {
+    showError("nameErr", "Name must be at least 3 characters");
+    valid = false;
+  } else { clearError("nameErr"); }
+
+  let email = document.getElementById("email").value;
+  if (!email.includes("@")) {
+    showError("emailErr", "Email must contain @");
+    valid = false;
+  } else { clearError("emailErr"); }
+
+  let age = Number(document.getElementById("age").value);
+  if (age < 18 || age > 60) {
+    showError("ageErr", "Age must be between 18 and 60");
+    valid = false;
+  } else { clearError("ageErr"); }
+
+  let agreed = document.getElementById("terms").checked;
+  if (!agreed) {
+    showError("termsErr", "You must agree to the terms");
+    valid = false;
+  } else { clearError("termsErr"); }
+
+  if (valid) showSuccess("Form Submitted Successfully!");
+}</pre>
+  </div>
+
+  <div class="card">
+    <h3>Live demo</h3>
+    <div class="demo-area">
+      <div style="margin-bottom:12px;">
+        <label>Name</label>
+        <input type="text" id="f-name" placeholder="Min 3 characters">
+        <div class="field-error" id="f-name-err"></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Email</label>
+        <input type="text" id="f-email" placeholder="Must contain @">
+        <div class="field-error" id="f-email-err"></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Age</label>
+        <input type="number" id="f-age" placeholder="18–60" style="width:100px;">
+        <div class="field-error" id="f-age-err"></div>
+      </div>
+      <div style="margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+        <input type="checkbox" id="f-terms" style="width:16px; height:16px; cursor:pointer;">
+        <label style="margin:0; cursor:pointer;" for="f-terms">I agree to terms</label>
+      </div>
+      <div class="field-error" id="f-terms-err" style="margin-bottom:8px;"></div>
+      <button onclick="doValidate()">Submit</button>
+      <div id="f-result" style="margin-top:10px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+let secret = Math.floor(Math.random() * 100) + 1;
+let tries = 0;
+function doGuess() {
+  let val = Number(document.getElementById('g-input').value);
+  let msg = document.getElementById('g-msg');
+  let triesEl = document.getElementById('g-tries');
+  if (!val || val < 1 || val > 100) { msg.className='msg msg-error'; msg.textContent='Enter a number between 1 and 100'; return; }
+  tries++;
+  triesEl.textContent = 'Tries so far: ' + tries;
+  if (val < secret) { msg.className='msg msg-info'; msg.textContent='Too Low! Try higher.'; }
+  else if (val > secret) { msg.className='msg msg-info'; msg.textContent='Too High! Try lower.'; }
+  else { msg.className='msg msg-success'; msg.textContent='Correct! You got it in ' + tries + ' tries.'; }
+}
+function resetGuess() {
+  secret = Math.floor(Math.random() * 100) + 1;
+  tries = 0;
+  document.getElementById('g-input').value = '';
+  document.getElementById('g-msg').textContent = '';
+  document.getElementById('g-msg').className = '';
+  document.getElementById('g-tries').textContent = '';
+}
+
+const toMeters = { km: 1000, m: 1, cm: 0.01, mm: 0.001 };
+function doConvert() {
+  let val = parseFloat(document.getElementById('c-val').value);
+  let unit = document.getElementById('c-unit').value;
+  let err = document.getElementById('c-err');
+  let res = document.getElementById('c-results');
+  if (document.getElementById('c-val').value === '') { err.style.display='none'; res.style.display='none'; return; }
+  if (isNaN(val)) { err.style.display='block'; err.textContent='Please enter a valid number'; res.style.display='none'; return; }
+  err.style.display='none'; res.style.display='block';
+  let m = val * toMeters[unit];
+  document.getElementById('r-km').textContent = (m / 1000).toLocaleString(undefined,{maximumFractionDigits:6}) + ' km';
+  document.getElementById('r-m').textContent = m.toLocaleString(undefined,{maximumFractionDigits:6}) + ' m';
+  document.getElementById('r-cm').textContent = (m * 100).toLocaleString(undefined,{maximumFractionDigits:4}) + ' cm';
+  document.getElementById('r-mm').textContent = (m * 1000).toLocaleString(undefined,{maximumFractionDigits:2}) + ' mm';
+}
+
+function updateClock() {
+  let now = new Date();
+  let h = now.getHours();
+  let m = String(now.getMinutes()).padStart(2,'0');
+  let s = String(now.getSeconds()).padStart(2,'0');
+  let hh = String(h).padStart(2,'0');
+  document.getElementById('live-clock').textContent = hh + ':' + m + ':' + s;
+  let greetings = ['Good Night','Good Night','Good Night','Good Night','Good Night',
+    'Good Morning','Good Morning','Good Morning','Good Morning','Good Morning','Good Morning','Good Morning',
+    'Good Afternoon','Good Afternoon','Good Afternoon','Good Afternoon','Good Afternoon','Good Afternoon',
+    'Good Evening','Good Evening','Good Evening','Good Evening',
+    'Good Night','Good Night'];
+  document.getElementById('live-greeting').textContent = greetings[h];
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+function doValidate() {
+  let valid = true;
+  function setErr(id, msg) { document.getElementById(id).textContent = msg; }
+  function clrErr(id) { document.getElementById(id).textContent = ''; }
+
+  let name = document.getElementById('f-name').value.trim();
+  if (name.length < 3) { setErr('f-name-err','Name must be at least 3 characters'); valid=false; } else clrErr('f-name-err');
+
+  let email = document.getElementById('f-email').value;
+  if (!email.includes('@') || email.length < 3) { setErr('f-email-err','Email must contain @'); valid=false; } else clrErr('f-email-err');
+
+  let age = Number(document.getElementById('f-age').value);
+  if (!age || age < 18 || age > 60) { setErr('f-age-err','Age must be between 18 and 60'); valid=false; } else clrErr('f-age-err');
+
+  let agreed = document.getElementById('f-terms').checked;
+  if (!agreed) { setErr('f-terms-err','You must agree to the terms'); valid=false; } else clrErr('f-terms-err');
+
+  let res = document.getElementById('f-result');
+  if (valid) { res.className='msg msg-success'; res.textContent='Form Submitted Successfully!'; }
+  else { res.className=''; res.textContent=''; }
+}
+</script>
